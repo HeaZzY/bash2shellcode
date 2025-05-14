@@ -1,29 +1,22 @@
-def xor_encode(shellcode: bytes, key: int) -> bytes:
+def encode_string(s: str, xor_key: int = 0x00) -> tuple[list[int], int]:
     """
-    Encode un shellcode en utilisant XOR.
-    
-    Args:
-        shellcode: Le shellcode à encoder
-        key: La clé XOR (un octet)
-    
-    Returns:
-        bytes: Le shellcode encodé
+    Encode une chaîne en valeurs numériques XORées.
+    Retourne les valeurs encodées et la longueur.
     """
-    return bytes(b ^ key for b in shellcode)
+    print("[+] s : ", s)
+    padded = s.encode() + b'\x00' * (8 - (len(s) % 8))
+    length = len(s)
 
-def encode_shellcode(shellcode: bytes, method: str = 'xor', key: int = 0x41) -> bytes:
-    """
-    Encode un shellcode selon la méthode spécifiée.
-    
-    Args:
-        shellcode: Le shellcode à encoder
-        method: Méthode d'encodage ('xor', etc.)
-        key: Clé d'encodage
-    
-    Returns:
-        bytes: Le shellcode encodé
-    """
-    if method == 'xor':
-        return xor_encode(shellcode, key)
-    else:
-        raise ValueError(f"Méthode d'encodage '{method}' non supportée") 
+    encoded = [b ^ xor_key for b in padded]
+
+    values = []
+    for i in range(0, len(encoded), 8):
+        chunk = encoded[i:i+8]
+        value = int.from_bytes(bytes(chunk), 'little')
+        print("[+] value : ", hex(value))
+        values.append(value)
+
+    return values, len(values)*8
+
+
+print(encode_string("uname -a", 0x01))

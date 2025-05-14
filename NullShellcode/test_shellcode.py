@@ -1,6 +1,6 @@
 import sys
 from src.shellgen.generator import generate_shellcode
-
+from src.shellgen.parseUserInput import makeArgumentsList
 def main():
     if len(sys.argv) < 2:
         print("Usage: python3 test_shellcode.py <command>")
@@ -9,7 +9,9 @@ def main():
     # Générer le shellcode avec la commande fournie
     command = sys.argv[1]
     print(command)
-    shellcode = generate_shellcode([command], xor_key=0xB6)
+    arguments = makeArgumentsList(command)
+    print(arguments)
+    shellcode = generate_shellcode(arguments, xor_key=0x01)
     
 '''    # Afficher en format C
     print("// Shellcode en format C")
