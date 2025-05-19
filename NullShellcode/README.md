@@ -1,13 +1,6 @@
-# Shellcode Generator
+# NullShellcode Generator
 
-Un outil en ligne de commande pour générer des shellcodes optimisés et obfusqués.
-
-## Fonctionnalités
-
-- Génération de shellcode à partir de commandes Linux
-- Optimisation pour éliminer les null bytes
-- Techniques d'obfuscation (XOR, etc.)
-- Support de différentes architectures
+Ce projet permet de générer du shellcode à partir de commandes shell pour Windows 64-bit.
 
 ## Installation
 
@@ -18,15 +11,33 @@ pip install -r requirements.txt
 ## Utilisation
 
 ```bash
-python -m shellgen generate "/bin/cat /etc/passwd"
-python -m shellgen encode --method xor --key 0x41 <shellcode>
+python shellcode_generator.py "votre commande ici"
 ```
 
-## Développement
+### Options
 
-Pour installer l'environnement de développement :
+- `-o, --output`: Format de sortie (c, python, raw) [défaut: c]
+- `-k, --key`: Clé XOR pour l'encodage [défaut: 0x01]
+- `-h, --help`: Affiche l'aide
+
+### Exemples
 
 ```bash
-pip install -r requirements.txt
-pytest  # Pour lancer les tests
+# Générer du shellcode pour la commande "whoami"
+python shellcode_generator.py "whoami"
+
+# Générer du shellcode en format Python
+python shellcode_generator.py "whoami" -o python
+
+# Générer du shellcode avec une clé XOR personnalisée
+python shellcode_generator.py "whoami" -k 0x42
 ```
+
+## Limitations
+
+- Supporte uniquement Windows 64-bit pour le moment
+- Les commandes complexes peuvent nécessiter des ajustements
+
+## Avertissement
+
+Ce projet est fourni à des fins éducatives uniquement. L'utilisation de ce code pour des activités malveillantes est strictement interdite.

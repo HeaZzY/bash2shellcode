@@ -73,10 +73,7 @@ def makeArgumentsList(userInput: str) -> list[str]:
 
 def setupToShellcode(parsedCommandList: list[str], xor_key: int = 0x00) -> list:
     list2return = []
-    print("======================")
-    print("[+] debut de parsing")
     for command in parsedCommandList:
-        print("[+] commande : ", command)
         encoded_values, length = encode_string(command, xor_key)
         # Calculer la taille totale en octets (arrondie à 8 bytes)
         coef = length // 8
@@ -84,10 +81,6 @@ def setupToShellcode(parsedCommandList: list[str], xor_key: int = 0x00) -> list:
         if reste != 0:
             coef += 1
         list2return.append((coef,encoded_values))
-        print("[+] coef : ", coef)
-        print("[+] encoded_values : ", encoded_values)
-    print("[+] fin de parsing")
-    print("======================")
     return list2return
 
 
