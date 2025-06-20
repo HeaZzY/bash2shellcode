@@ -51,7 +51,7 @@ python3 bash2shellcode.py "/bin/bash -c 'echo shellcodeTheWorld'" -o raw
 
 ## ⚠ Limitations
 
-- Only supports Linux x86_64 shellcode generation.
+- Only supports Linux x64 shellcode generation. (working on x86 architecture support)
 - Shellcode is based on executing the command using /bin/bash -c 'yourcmdthere'.
 - No support (yet) for other OS or architectures.
 - May not work sometimes with forbidden bytes (working on it)
