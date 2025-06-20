@@ -7,7 +7,6 @@
 https://github.com/user-attachments/assets/48210537-d447-4d70-b500-9441262015b8
 
 
-
 ---
 
 ##  Features
@@ -21,6 +20,29 @@ https://github.com/user-attachments/assets/48210537-d447-4d70-b500-9441262015b8
 - Supports forbidden bytes (e.g. \x00, \xff)
 
 ---
+
+---
+
+## Requirements
+
+- nasm 
+- ld 
+- objdump
+
+### Install required packages:
+```bash
+sudo apt install binutils nasm objdump
+```
+
+### Install python requirements:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+
 
 ##  Usage
 
