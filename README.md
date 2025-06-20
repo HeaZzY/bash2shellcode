@@ -2,6 +2,12 @@
 
 **bash2shellcode** is a Linux x86_64 shellcode generator that converts any bash command into shellcode (ASM or raw format), ready for use in exploits or payloads.
 
+
+
+https://github.com/user-attachments/assets/48210537-d447-4d70-b500-9441262015b8
+
+
+
 ---
 
 ##  Features
