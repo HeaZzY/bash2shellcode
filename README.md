@@ -21,7 +21,6 @@ https://github.com/user-attachments/assets/48210537-d447-4d70-b500-9441262015b8
 
 ---
 
----
 
 ## Requirements
 
@@ -94,11 +93,5 @@ Intel syntax assembly code for manual inspection or use with an assembler.
 ### Format raw
 Raw shellcode string with escaped hex bytes (\x...), ready to be used in exploits or injectors.
 
----
 
-##  Author
-
-- Heazzy (https://github.com/heazzy)
-
----
 
